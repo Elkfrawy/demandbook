@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <title>Crossover Library</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="author" content="Crossover"/>
+
+    <!-- Le styles -->
+    <link href="../static/css/bootstrap.min2.css" rel="stylesheet"
+          th:href="@{/css/bootstrap.min.css}"/>
+    <link href="../static/css/bootstrap-responsive.min.css" rel="stylesheet"
+          th:href="@{/css/bootstrap-responsive.min.css}"/>
+    <link href="../static/css/app.css" rel="stylesheet"
+          th:href="@{/css/app.css}"/>
+    <link rel="shortcut icon" href="../assets/ico/favicon.png"/>
+
+    <style>
+        body {
+            padding-top: 80px;
+        }
+
+    </style>
+</head>
+
+<body>
+
+<div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container">
+            <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="brand" th:href="@{/}">Demand Books</a>
+            <div class="nav-collapse collapse">
+                <ul class="nav">
+                    <li class="active"><a href="#">Home</a></li>
+                    <li><a th:href="@{/demand}">My Demands</a></li>
+                    <li><a href="#contact">My Account</a></li>
+                </ul>
+            </div><!--/.nav-collapse -->
+        </div>
+    </div>
+</div>
+
+<div class="container">
+
+    <form th:action="@{/book}">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    <input type="text" name="q" class="form-control input-search"/>
+                    <span class="input-group-btn">
+                      <button class="btn btn-search" type="submit">Search<i class="glyphicon glyphicon-search"></i></button>
+                    </span>
+                </div><!-- /input-group -->
+            </div><!-- /.col-lg-6 -->
+        </div><!-- /.row -->
+    </form>
+
+    <table class="table table-striped table-hover">
+        <thead>
+        <tr>
+            <td></td>
+            <td style="color: grey">Publisher</td>
+            <td></td>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="book : ${books}">
+            <td>
+                <strong> <a th:href="@{/book/{id} (id=${book.id})}" th:text="${book.title}"></a> </strong><br/>
+                <small>By:</small>
+                <em> <span th:each="author,iterStat : ${book.authors}">
+					<a th:href="@{/book?author={author} (author=${author})}" th:text="${author}"></a> <th:block
+                        th:if="${!iterStat.last}">,</th:block>
+                      </span>
+                </em>
+            </td>
+            <td><a th:href="@{/book?publisher={pub} (pub=${book.publisher})}" th:text="${book.publisher}"></a></td>
+            <td>
+                <form method="POST" th:action="@{/demand}">
+                    <button class="btn btn-primary" type="submit" name="bookid" th:value="${book.id}">Add to Demands</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+</div> <!-- /container -->
+
+<!-- Le javascript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="../static/js/jquery.js"
+        th:src="@{/js/jquery.js}"></script>
+<script src="../static/js/bootstrap.min.js"
+        th:src="@{/js/bootstrap.min.js}"></script>
+
+</body>
+</html>
