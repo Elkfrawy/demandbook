@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head th:fragment="head_tag">
     <meta charset="utf-8"/>
     <title>Crossover Library</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -9,9 +9,16 @@
     <!-- Le styles -->
     <link href="../static/css/bootstrap.min2.css" rel="stylesheet"
           th:href="@{/css/bootstrap.min.css}"/>
-    <link href="../static/css/bootstrap-responsive.min.css" rel="stylesheet"
-          th:href="@{/css/bootstrap-responsive.min.css}"/>
+    <link href="../static/css/bootstrap-theme.min.css" rel="stylesheet"
+          th:href="@{/css/bootstrap-theme.min.css}"/>
+    <link href="../static/css/app.css" rel="stylesheet"
+          th:href="@{/css/app.css}"/>
     <link rel="shortcut icon" href="../assets/ico/favicon.png"/>
+
+    <script src="../static/js/jquery.js"
+            th:src="@{/js/jquery.js}"></script>
+    <script src="../static/js/bootstrap.min.js"
+            th:src="@{/js/bootstrap.min.js}"></script>
 
     <style>
         body {
@@ -23,51 +30,49 @@
 
 <body>
 
-<div class="navbar navbar-inverse navbar-fixed-top">
-    <div class="navbar-inner">
-        <div class="container">
-            <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+<nav class="navbar navbar-inverse navbar-fixed-top" th:fragment="toolbar">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="brand" th:href="@{/}">Demand Books</a>
-            <div class="nav-collapse collapse">
-                <ul class="nav">
-                    <li class="active"><a href="#">Home</a></li>
-                    <li><a href="#about">My Demands</a></li>
-                    <li><a href="#contact">My Account</a></li>
-                </ul>
-            </div><!--/.nav-collapse -->
+            <a class="navbar-brand" th:href="@{/}">Demand Books</a>
         </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="/">Home</a></li>
+                <li><a href="/demand">My Demands</a></li>
+                <li><a href="/account">My Account</a></li>
+                <li class="logout"
+                    sec:authorize="isAuthenticated()">
+                    <form th:action="@{/logout}" method="post" style="display:inline">
+                        <input class="btn btn-default" type="submit" value="Logout"/></form>
+                </li>
+            </ul>
+        </div><!--/.nav-collapse -->
     </div>
-</div>
+</nav>
+
 
 <div class="container">
 
-    <span class="brand-name">Crossover Library Book Demands </span>
-    <form th:action="@{/book}">
-        <div class="row">
-            <div class="col-lg-6">
-                <div class="input-group">
-                    <input type="text" name="q" class="form-control input-search"/>
-                    <span class="input-group-btn">
-                      <button class="btn btn-search" type="submit">Search<i class="glyphicon glyphicon-search"></i></button>
-                    </span>
-                </div><!-- /input-group -->
-            </div><!-- /.col-lg-6 -->
-        </div><!-- /.row -->
+    <h1>Welcome to Crossover Library Book Demands </h1>
+    <form th:action="@{/book}" class="form-horizontal">
+        <div class="form-group form-group-lg">
+            <div class="col-sm-12">
+                <input class="form-control" name="q" type="text" id="formGroupInputLarge" placeholder="Search books by title, content or authors"/>
+                <button class="btn btn-search" type="submit">Search</button>
+            </div>
+        </div>
+
     </form>
 
 </div> <!-- /container -->
 
-<!-- Le javascript
-================================================== -->
-<!-- Placed at the end of the document so the pages load faster -->
-<script src="../static/js/jquery.js"
-        th:src="@{/js/jquery.js}"></script>
-<script src="../static/js/bootstrap.min.js"
-        th:src="@{/js/bootstrap.min.js}"></script>
+
 
 </body>
 </html>

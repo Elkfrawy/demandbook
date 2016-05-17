@@ -31,7 +31,7 @@ public class BookController {
                              Model model) {
         List<Book> books;
         if (!StringUtils.isEmpty(q))
-            books = bookService.searchBooksByTitleOrDesc(q);
+            books = bookService.searchBooksByAny(q);
         else if (!StringUtils.isEmpty(author))
             books = bookService.searchBooksByAuthor(author);
         else if (!StringUtils.isEmpty(publisher))

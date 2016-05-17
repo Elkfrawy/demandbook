@@ -20,4 +20,5 @@ public interface BookRepository extends MongoRepository<Book, String> {
 
     List<Book> findByPublisherLike(String publisher);
 
+    List<Book> findByDescriptionLikeOrTitleLikeOrAuthorsLikeIgnoreCase(String descQuery, String titleQuery, String authorQuery);
 }

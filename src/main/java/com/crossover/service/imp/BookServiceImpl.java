@@ -58,4 +58,9 @@ public class BookServiceImpl implements BookService {
     public List<Book> getAllBooks(List<String> bookids) {
         return new ArrayList<>(Util.makeCollection(bookRepository.findAll(bookids)));
     }
+
+    @Override
+    public List<Book> searchBooksByAny(String query) {
+        return bookRepository.findByDescriptionLikeOrTitleLikeOrAuthorsLikeIgnoreCase(query,query,query);
+    }
 }

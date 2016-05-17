@@ -33,7 +33,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .formLogin()
                 .loginPage("/login")
                 .failureUrl("/login?error")
-                .usernameParameter("email")
+                .usernameParameter("username")
                 .permitAll()
                 .and()
                 .logout()
@@ -42,7 +42,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .logoutSuccessUrl("/")
                 .permitAll()
                 .and()
-                .rememberMe().and().csrf().disable();
+                .rememberMe(); //.and().csrf().disable();
     }
 
     @Override

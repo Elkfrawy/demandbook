@@ -17,4 +17,5 @@ public interface BookService {
     List<Book> searchBooksByPublisher(String publisher);
     Book getBookById(String id);
     List<Book> getAllBooks(List<String> bookids);
+    List<Book> searchBooksByAny(String query);
 }

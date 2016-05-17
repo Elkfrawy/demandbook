@@ -1,12 +1,14 @@
 package com.crossover.controller;
 
 import com.crossover.domain.Book;
+import com.crossover.domain.CurrentUser;
 import com.crossover.domain.Demand;
 import com.crossover.domain.User;
 import com.crossover.service.BookService;
 import com.crossover.service.DemandService;
 import com.crossover.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,39 +35,28 @@ public class DemandController {
 
     @Autowired
     BookService bookService;
-/*
-    @RequestMapping(value = "/demand", method = RequestMethod.POST)
-    @ResponseBody()
-    public String addDemandToCurrentUser(@RequestParam() String bookid) {
-        Demand demandToAdd = new Demand();
-        User user = userService.getUserById(1L);
-        demandToAdd.setBookId(bookid);
-        demandToAdd.setUser(user);
-//        user.getDemands().add(demand);
 
-        demandService.addDemand(demandToAdd);
-//        userRepository.save(user);
-        return "success";
-    }
-*/
+//    @Autowired
+//    Authentication authentication;
+
     @RequestMapping(value = "/demand", method = RequestMethod.POST)
     public String addDemandToCurrentUser(@RequestParam() String bookid,
-                                         HttpServletRequest request) {
-        System.out.println("Demand POST");
+                                         HttpServletRequest request,
+                                         Authentication authentication) {
         Demand demandToAdd = new Demand();
-        User user = userService.getUserById(1L);
+        User user = getCurrentUserFromDB(authentication);
         demandToAdd.setBookId(bookid);
         demandToAdd.setUser(user);
         demandService.addDemand(demandToAdd);
-        System.out.println("Demand to add: "  + demandToAdd);
+
         return "redirect:" + request.getHeader("Referer");
     }
 
     @RequestMapping(value = "/demand", method = RequestMethod.DELETE)
     public String removeDemandFromCurrentUser(@RequestParam() String bookid,
-                                              HttpServletRequest request) {
-        System.out.println("Demand DELETE");
-        User user = userService.getUserById(1L);
+                                              HttpServletRequest request,
+                                              Authentication authentication) {
+        User user =getCurrentUserFromDB(authentication);
         Demand demandToDelete = demandService.getDemandByUseridAndBookid(user.getId(), bookid);
         demandService.deleteDemand(demandToDelete);
 
@@ -74,8 +65,8 @@ public class DemandController {
 
 
     @RequestMapping(value = "/demand", method = RequestMethod.GET)
-    public String getUserDemandBooks(Model model) {
-        User user = userService.getUserById(1L);
+    public String getUserDemandBooks(Model model, Authentication authentication) {
+        User user = getCurrentUserFromDB(authentication);
         List<String> bookids = new ArrayList<>();
         for (Demand demand : user.getDemands()) {
             bookids.add(demand.getBookId());
@@ -85,4 +76,11 @@ public class DemandController {
 
         return "mydemands";
     }
+
+
+    private User getCurrentUserFromDB(Authentication authentication) {
+       User user = ((CurrentUser) authentication.getPrincipal()).getUser();
+       return userService.getUserById(user.getId());
+    }
+
 }

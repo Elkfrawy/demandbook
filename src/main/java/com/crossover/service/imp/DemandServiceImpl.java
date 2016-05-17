@@ -4,6 +4,7 @@ import com.crossover.domain.Demand;
 import com.crossover.repository.DemandRepository;
 import com.crossover.service.DemandService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
