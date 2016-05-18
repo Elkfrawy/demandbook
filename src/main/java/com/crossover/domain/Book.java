@@ -71,7 +71,7 @@ public class Book {
     @Override
     public String toString() {
         return String.format("Book[id=%s, title=%s, Authors=%s, Description=%s]",
-                id, title, authors.toString(),
+                id, title, authors!=null? authors.toString() : "",
                 (description!=null && description.length() > 50)? description.substring(0,50)+"...": description);
     }
 }

@@ -93,4 +93,13 @@ public class User {
         return String.format("User[id=%s, username=%s, password=%s, email=%s]",
                                     id, username, password, email);
     }
+
+    public boolean hasDemandForBook(Book book) {
+        for (Demand demand : getDemands()) {
+            if (demand.getBookId() != null &&
+                    demand.getBookId().equals(book.getId()))
+                return true;
+        }
+        return false;
+    }
 }

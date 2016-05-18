@@ -1,5 +1,7 @@
 package com.crossover.service.imp;
 
+import com.crossover.domain.Book;
+import com.crossover.domain.Demand;
 import com.crossover.domain.User;
 import com.crossover.domain.UserCreateForm;
 import com.crossover.repository.UserRepository;

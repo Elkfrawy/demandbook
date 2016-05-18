@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:include="index :: head_tag">
+</head>
+
+<body>
+
+<div class="navbar navbar-inverse navbar-fixed-top" th:include="index :: toolbar">
+</div>
+
+<div class="container">
+
+    <div class="jumbotron" th:unless="${book == null}">
+        <h1 >
+            <span th:text="${book.title}"></span>
+            <h4> By:
+                 <span th:each="author,iterStat : ${book.authors}">
+                        <a th:href="@{/book?author={author} (author=${author})}" th:text="${author}"></a>
+                        <th:block th:if="${!iterStat.last}">,</th:block>
+                 </span>
+            </h4>
+        </h1>
+        <a th:href="@{/book?publisher={pub} (pub=${book.publisher})}" th:text="${book.publisher}"></a>
+
+        <p th:text="${book.description}" style="margin-top: 30px"> </p>
+
+        <div th:if="${hasdemand}">
+            <form th:replace="mydemands :: remove_demand"></form>
+        </div>
+
+        <div th:if="${!hasdemand}">
+            <form th:replace="books :: add_demand"></form>
+        </div>
+
+    </div>
+    <div th:if="${book == null}"><h2>Sorry we couldn't find your book!</h2></div>
+
+</div> <!-- /container -->
+
+</body>
+</html>

@@ -4,8 +4,15 @@ import com.crossover.domain.User;
 import com.crossover.domain.UserCreateForm;
 import com.crossover.domain.validator.UserCreateFormValidator;
 import com.crossover.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -22,56 +29,33 @@ import java.util.Optional;
 @Controller
 public class UserController {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
+
     @Autowired
     UserService userService;
 
     @Autowired
     UserCreateFormValidator userCreateFormValidator;
 
-/*
     @Autowired
-    UserService userService;
+    UserDetailsService userDetailsService;
 
-    @RequestMapping(value = "/", method = RequestMethod.GET)
-    public String listAllUsers() {
-        return userService.getAllUsers().toString();
-    }
-
-    @RequestMapping(value = "/", method = RequestMethod.POST)
-    public String registerUser(@RequestParam() String username,
-                               @RequestParam() String email,
-                               @RequestParam() String password) {
-        User user = new User(username, password, email);
-        if (userService.registerUser(user)) {
-            return "Registration Successes";
-        } else
-            return "Registration failed!";
-    }
-
-    @RequestMapping(value = "/", method = RequestMethod.PUT)
-    public String updateUser() {
-
-        return "TODO";
-    }
-
-    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-    public String deleteUser(@PathVariable long id) {
-        if (userService.deleteUserById(id))
-            return "Delete Success";
-        else
-            return "Delete Failed";
-    }*/
-
+    @Autowired
+    protected AuthenticationManager authenticationManager;
 
     @RequestMapping(value = "/user/create", method = RequestMethod.POST)
     public String handleUserCreateForm(@Valid @ModelAttribute("form") UserCreateForm form, BindingResult bindingResult) {
-        System.out.println(form);
         if (bindingResult.hasErrors()) {
+            LOGGER.info("User Form has errors BindingResult={} , Form={}", bindingResult, form);
             return "login";
         }
         try {
             userService.registerUser(form);
+            LOGGER.info("User Registered success, Form={}", form);
+            // TODO Authenticate registered user
+
         } catch (DataIntegrityViolationException e) {
+            LOGGER.info("Error while registering user, Form={}, exception:", form, e.getMessage());
             bindingResult.reject("username.exists", "This username already exists");
             return "login";
         }
@@ -83,17 +67,11 @@ public class UserController {
         binder.addValidators(userCreateFormValidator);
     }
 
-
-   /* @RequestMapping("/login")
-    public String login(Model model) {
-        model.addAttribute("form", new UserCreateForm());
-        return "login";
-    }
-*/
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public String getLoginPage(@RequestParam Optional<String> error,
                                Model model) {
         model.addAttribute("error", error);
         return "login";
     }
+
 }

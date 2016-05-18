@@ -47,6 +47,11 @@ public class DemandController {
         User user = getCurrentUserFromDB(authentication);
         demandToAdd.setBookId(bookid);
         demandToAdd.setUser(user);
+        // Get book title to save it as a reference in case book get deleted from the source later
+        Book book = bookService.getBookById(bookid);
+        if (book != null)
+            demandToAdd.setBookTitle(book.getTitle());
+
         demandService.addDemand(demandToAdd);
 
         return "redirect:" + request.getHeader("Referer");
@@ -56,7 +61,7 @@ public class DemandController {
     public String removeDemandFromCurrentUser(@RequestParam() String bookid,
                                               HttpServletRequest request,
                                               Authentication authentication) {
-        User user =getCurrentUserFromDB(authentication);
+        User user = getCurrentUserFromDB(authentication);
         Demand demandToDelete = demandService.getDemandByUseridAndBookid(user.getId(), bookid);
         demandService.deleteDemand(demandToDelete);
 
