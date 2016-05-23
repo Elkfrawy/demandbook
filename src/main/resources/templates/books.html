@@ -14,9 +14,9 @@
         <div class="row">
             <div class="col-lg-6">
                 <div class="input-group">
-                    <input type="text" name="q" class="form-control input-search"  placeholder="Search books by title, content or authors"/>
+                    <input type="text" name="q" class="form-control input-search"  th:placeholder="#{books.search_hint}"/>
                     <span class="input-group-btn">
-                      <button class="btn btn-search" type="submit">Search<i
+                      <button class="btn btn-search" type="submit" th:text="#{books.search}"><i
                               class="glyphicon glyphicon-search"></i></button>
                     </span>
                 </div><!-- /input-group -->
@@ -24,12 +24,12 @@
         </div><!-- /.row -->
     </form>
 
-    <h3 th:if="${#lists.isEmpty(books)}">We couldn't find any book matches your query.</h3>
+    <h3 th:if="${#lists.isEmpty(books)}" th:text="#{books.no_result}"></h3>
     <table class="table table-striped table-hover" th:unless="${#lists.isEmpty(books)}">
         <thead>
         <tr>
             <td></td>
-            <td style="color: grey">Publisher</td>
+            <td style="color: grey" th:text="#{publisher}"></td>
             <td></td>
         </tr>
         </thead>
@@ -39,15 +39,15 @@
                 <strong> <a th:href="@{/book/{id} (id=${book.id})}" th:text="${book.title}"></a> </strong><br/>
                 <small>By:</small>
                 <em> <span th:each="author,iterStat : ${book.authors}">
-					<a th:href="@{/book?author={author} (author=${author})}" th:text="${author}"></a> <th:block
-                        th:if="${!iterStat.last}">,</th:block>
+					<a th:href="@{/book?author={author} (author=${author})}" th:text="${author}"></a>
+                    <th:block th:if="${!iterStat.last}">,</th:block>
                       </span>
                 </em>
             </td>
             <td><a th:href="@{/book?publisher={pub} (pub=${book.publisher})}" th:text="${book.publisher}"></a></td>
             <td>
                 <form method="POST" th:action="@{/demand}" th:fragment="add_demand">
-                    <button class="btn btn-primary" type="submit" name="bookid" th:value="${book.id}">Add to Demands
+                    <button class="btn btn-primary" type="submit" name="bookid" th:value="${book.id}" th:text="#{books.add_demand}">
                     </button>
                 </form>
             </td>

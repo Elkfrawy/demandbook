@@ -36,15 +36,12 @@ public class DemandController {
     @Autowired
     BookService bookService;
 
-//    @Autowired
-//    Authentication authentication;
 
     @RequestMapping(value = "/demand", method = RequestMethod.POST)
     public String addDemandToCurrentUser(@RequestParam() String bookid,
-                                         HttpServletRequest request,
-                                         Authentication authentication) {
+                                         HttpServletRequest request) {
         Demand demandToAdd = new Demand();
-        User user = getCurrentUserFromDB(authentication);
+        User user = userService.getCurrentUser();
         demandToAdd.setBookId(bookid);
         demandToAdd.setUser(user);
         // Get book title to save it as a reference in case book get deleted from the source later
@@ -59,9 +56,8 @@ public class DemandController {
 
     @RequestMapping(value = "/demand", method = RequestMethod.DELETE)
     public String removeDemandFromCurrentUser(@RequestParam() String bookid,
-                                              HttpServletRequest request,
-                                              Authentication authentication) {
-        User user = getCurrentUserFromDB(authentication);
+                                              HttpServletRequest request) {
+        User user = userService.getCurrentUser();
         Demand demandToDelete = demandService.getDemandByUseridAndBookid(user.getId(), bookid);
         demandService.deleteDemand(demandToDelete);
 
@@ -70,8 +66,8 @@ public class DemandController {
 
 
     @RequestMapping(value = "/demand", method = RequestMethod.GET)
-    public String getUserDemandBooks(Model model, Authentication authentication) {
-        User user = getCurrentUserFromDB(authentication);
+    public String getUserDemandBooks(Model model) {
+        User user = userService.getCurrentUser();
         List<String> bookids = new ArrayList<>();
         for (Demand demand : user.getDemands()) {
             bookids.add(demand.getBookId());
@@ -80,12 +76,6 @@ public class DemandController {
         model.addAttribute("books", books);
 
         return "mydemands";
-    }
-
-
-    private User getCurrentUserFromDB(Authentication authentication) {
-       User user = ((CurrentUser) authentication.getPrincipal()).getUser();
-       return userService.getUserById(user.getId());
     }
 
 }

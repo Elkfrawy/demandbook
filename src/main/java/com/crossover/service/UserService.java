@@ -11,15 +11,18 @@ import java.util.List;
  */
 public interface UserService {
 
-    public boolean registerUser(UserCreateForm userCreateForm);
-    public boolean loginUser(User user);
-    public boolean updateUser(User user);
-    public boolean deleteUser(User user);
+    boolean registerUser(UserCreateForm userCreateForm);
+    boolean loginUser(User user);
+    boolean updateUser(User user);
+    boolean deleteUser(User user);
 
-    public User getUserById(long id);
-    public User getUserByUsername(String username);
-    public User getUserByEmail(String email);
-    public List<User> getAllUsers();
+    User getUserById(long id);
+    User getUserByUsername(String username);
+    User getUserByEmail(String email);
+    List<User> getAllUsers();
 
     boolean deleteUserById(long id);
+
+    User getCurrentUser();
+
 }

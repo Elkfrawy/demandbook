@@ -1,12 +1,10 @@
 package com.crossover.service.imp;
 
-import com.crossover.domain.Book;
-import com.crossover.domain.Demand;
-import com.crossover.domain.User;
-import com.crossover.domain.UserCreateForm;
+import com.crossover.domain.*;
 import com.crossover.repository.UserRepository;
 import com.crossover.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -74,5 +72,12 @@ public class UserServiceImpl implements UserService {
     public boolean deleteUserById(long id) {
         userRepository.delete(id);
         return true;
+    }
+
+    @Override
+    public User getCurrentUser() {
+        User user = ((CurrentUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUser();
+//        User user = ((CurrentUser) authentication.getPrincipal()).getUser();
+        return getUserById(user.getId());
     }
 }

@@ -35,8 +35,7 @@ public class BookController {
     public String searchBook(@RequestParam(required = false) String q,
                              @RequestParam(required = false) String author,
                              @RequestParam(required = false) String publisher,
-                             Model model,
-                             Authentication authentication) {
+                             Model model) {
         List<Book> books;
         if (!StringUtils.isEmpty(q))
             books = bookService.searchBooksByAny(q);
@@ -55,11 +54,10 @@ public class BookController {
 
     @RequestMapping("/book/{id}")
     public String getBookDetails(@PathVariable() String id,
-                                 Model model,
-                                 Authentication authentication) {
+                                 Model model) {
         Book book = bookService.getBookById(id);
         // Check if current user demanded this book
-        User currentUser = getCurrentUserFromDB(authentication);
+        User currentUser = userService.getCurrentUser();
         boolean demanded = false;
         if (currentUser.hasDemandForBook(book))
             demanded = true;
@@ -74,11 +72,9 @@ public class BookController {
         return "index";
     }
 
-    private User getCurrentUserFromDB(Authentication authentication) {
-        User user = ((CurrentUser)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUser();
-//        User user = ((CurrentUser) authentication.getPrincipal()).getUser();
-        return userService.getUserById(user.getId());
-    }
+//    private User getCurrentUserFromDB(Authentication authentication) {
+//
+//    }
 
 
 }

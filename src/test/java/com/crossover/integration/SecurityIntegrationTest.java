@@ -1,7 +1,6 @@
 package com.crossover.integration;
 
 import com.crossover.DemandbookApplication;
-import com.crossover.domain.CurrentUser;
 import com.crossover.domain.Role;
 import com.crossover.domain.User;
 import com.crossover.service.UserService;
@@ -11,7 +10,6 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.boot.test.WebIntegrationTest;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;

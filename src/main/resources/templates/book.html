@@ -33,7 +33,7 @@
         </div>
 
     </div>
-    <div th:if="${book == null}"><h2>Sorry we couldn't find your book!</h2></div>
+    <div th:if="${book == null}"><h2 th:text="#{books.book_not_exist}"></h2></div>
 
 </div> <!-- /container -->
 
